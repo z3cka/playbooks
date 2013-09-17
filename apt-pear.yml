@@ -1,0 +1,9 @@
+---
+- name: install php-pear TODO and drush too!
+  hosts: all
+  user: vagrant 
+
+  tasks:
+
+   - name: install php-pear
+     apt: name=php-pear state=present
