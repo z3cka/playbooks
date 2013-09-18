@@ -1,0 +1,24 @@
+---
+- name: install all requirements for Drupal 8 and start apache2 and mysql
+  hosts: all
+  user: vagrant 
+
+  tasks:
+
+   - name: install apache2
+     apt: name=apache2 state=latest update_cache=yes
+
+   - name: install mysql
+     apt: name=mysql-server state=latest
+   - name: start mysql
+     service: name=mysql state=running
+
+   - name: install php5
+     apt: name=php5 state=latest
+   - name: install php-pear
+     apt: name=php-pear state=present
+   - name: install php-gd
+     apt: name=php5-gd state=latest
+
+   - name: start apache2
+     service: name=apache2 state=running
