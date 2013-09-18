@@ -17,8 +17,15 @@
      apt: name=php5 state=latest
    - name: install php-pear
      apt: name=php-pear state=present
-   - name: install php-gd
+   - name: install php5-gd
      apt: name=php5-gd state=latest
+   - name: install php5-mysql
+     apt: name=php5-mysql state=latest
 
    - name: start apache2
      service: name=apache2 state=running
+
+   - name: install vim
+     apt: name=vim state=latest
+   - name: install htop
+     apt: name=htop state=latest
