@@ -3,6 +3,9 @@
   hosts: all
   user: vagrant 
 
+  vars:
+    php_upload_max_filesize: 8M
+
   tasks:
 
    - name: install apache2
@@ -21,11 +24,26 @@
      apt: name=php5-gd state=latest
    - name: install php5-mysql
      apt: name=php5-mysql state=latest
+   # PHP Setup.
+   - name: PHP | Configuration file, php.ini
+     action: template src=templates/etc-php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
 
-   - name: start apache2
-     service: name=apache2 state=running
+   # Apache2 Setup
+   - name: Apache | Enable mod_rewrite
+     action: command a2enmod rewrite
+   - name: Apache2 | default vhosts file, 000-default -> enable .htaccess
+     template: src=templates/etc-apache2-sites-enabled-000-default.j2 dest=/etc/apache2/sites-enabled/000-default
+
+   - name: restart apache 
+     service: name=apache2 state=restarted
 
    - name: install vim
      apt: name=vim state=latest
    - name: install htop
      apt: name=htop state=latest
+   - name: install git
+     apt: name=git state=latest
+
+#  handlers:
+#   - name: restart apache
+#     service: name:apache2 state=restarted
