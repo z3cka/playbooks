@@ -1,5 +1,5 @@
 ---
-- name: install all requirements for Drupal 8 and start apache2 and mysql
+- name: install some choice requirements for Drupal 7 or 8 and start apache2 and mysql and make some other system mods for development
   hosts: all
   user: vagrant 
 
@@ -23,6 +23,9 @@
  
    - name: install php-pear
      apt: name=php-pear state=present
+# TODO:   
+#  - name: install drush
+     
    - name: install php5-gd
      apt: name=php5-gd state=latest
    - name: install php5-mysql
@@ -46,3 +49,11 @@
      apt: name=htop state=latest
    - name: install git
      apt: name=git state=latest
+
+   # User mods
+   - name: set vagrant user primary group to www-data
+     user: name=vagrant group="www-data"
+
+   # Directory perms for /var/www
+   - name: set group and perms for /var/www
+     action: file state=directory path=/var/www mode=0775 owner=root group=www-data recurse=yes 
