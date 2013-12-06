@@ -23,8 +23,11 @@
  
    - name: install php-pear
      apt: name=php-pear state=present
-# TODO:   
-#  - name: install drush
+   - name: install drush
+     action: shell pear channel-discover pear.drush.org
+     ignore_errors: True
+   - command: pear install -f drush/drush
+   - command: sudo drush --version
      
    - name: install php5-gd
      apt: name=php5-gd state=latest
@@ -49,6 +52,8 @@
      apt: name=htop state=latest
    - name: install git
      apt: name=git state=latest
+   - name: install unzip
+     apt: name=unzip state=latest
 
    # User mods
    - name: set vagrant user primary group to www-data
