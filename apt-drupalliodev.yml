@@ -25,7 +25,7 @@
      apt: name=php-pear state=present
    - name: install drush
      action: shell pear channel-discover pear.drush.org
-     ignore_errors: True
+     ignore_errors: False
    - command: pear install -f drush/drush
    - command: sudo drush --version
      
