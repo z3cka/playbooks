@@ -1,0 +1,9 @@
+---
+- name: install red5 on atp server via vagrant
+  hosts: red5servers
+  user: vagrant
+
+  tasks:
+
+   - name: install red5
+     apt: name=red5-server state=latest update_cache=yes
