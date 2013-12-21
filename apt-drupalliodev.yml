@@ -1,6 +1,6 @@
 ---
 - name: install some choice requirements for Drupal 7 or 8 and start apache2 and mysql and make some other system mods for development
-  hosts: all
+  hosts: drupallioservers
   user: vagrant 
 
   vars:
@@ -20,7 +20,7 @@
      apt: name=php5-common state=latest
    - name: install php
      apt: name=php5 state=latest
- 
+
    - name: install php-pear
      apt: name=php-pear state=present
    - name: install drush
@@ -28,7 +28,7 @@
      ignore_errors: True
    - command: pear install -f drush/drush
    - command: sudo drush --version
-     
+
    - name: install php5-gd
      apt: name=php5-gd state=latest
    - name: install php5-mysql
@@ -43,9 +43,14 @@
    - name: Apache2 | default vhosts file, 000-default -> enable .htaccess
      template: src=templates/etc-apache2-sites-enabled-000-default.j2 dest=/etc/apache2/sites-enabled/000-default
 
+   # phpMyAdmin
+   - name: install phpmyadmin
+     apt: name=phpmyadmin state=latest
+
    - name: restart apache 
      service: name=apache2 state=restarted
 
+   # Dev tools/utils
    - name: install vim
      apt: name=vim state=latest
    - name: install htop
