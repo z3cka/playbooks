@@ -1,0 +1,72 @@
+---
+- name: install some choice requirements for Drupal 7 or 8 and start nginx and mysql and make some other system mods for production
+  hosts: nginx-drupal
+  user: root 
+
+  # vars:
+    # php_upload_max_filesize: 8M
+
+  tasks:
+
+   - name: add nginx pgp key
+     apt_key: url=http://nginx.org/keys/nginx_signing.key state=present
+
+   - name: append nginx repo to sources list
+     lineinfile: dest=/etc/apt/sources.list line="deb http://nginx.org/packages/debian/ wheezy nginx"
+   - name: append nginx src repo to sources list
+     lineinfile: dest=/etc/apt/sources.list line="deb-src http://nginx.org/packages/debian/ wheezy nginx"
+
+   - name: install nginx
+     apt: name=nginx state=latest update_cache=yes
+
+   - name: install mysql
+     apt: name=mysql-server state=latest
+   - name: start mysql
+     service: name=mysql state=running
+
+   - name: install php stuff
+     apt: name=php5-fpm state=latest
+   - name: more php stuff
+     apt: name=php5-mysql state=latest
+
+   # - name: install php-pear
+   #   apt: name=php-pear state=present
+   # - name: install drush
+   #   action: shell pear channel-discover pear.drush.org
+   #   ignore_errors: True
+   # - command: pear install -f drush/drush
+   # - command: sudo drush --version
+
+   # - name: install php5-gd
+   #   apt: name=php5-gd state=latest
+   # - name: install php5-mysql
+   #   apt: name=php5-mysql state=latest
+   # # PHP Setup
+   # - name: PHP | Configuration file, php.ini
+   #   action: template src=templates/etc-php5-apache2-php-ini.j2 dest=/etc/php5/apache2/php.ini
+
+   # # Apache2 Setup
+   # - name: Apache | Enable mod_rewrite
+   #   action: command a2enmod rewrite
+   # - name: Apache2 | default vhosts file, 000-default -> enable .htaccess
+   #   template: src=templates/etc-apache2-sites-enabled-000-default.j2 dest=/etc/apache2/sites-enabled/000-default
+
+   - name: restart nginx 
+     service: name=nginx state=restarted
+
+   # - name: install vim
+   #   apt: name=vim state=latest
+   # - name: install htop
+   #   apt: name=htop state=latest
+   # - name: install git
+   #   apt: name=git state=latest
+   # - name: install unzip
+   #   apt: name=unzip state=latest
+
+   # # User mods
+   # - name: set vagrant user primary group to www-data
+   #   user: name=vagrant group="www-data"
+
+   # # Directory perms for /var/www
+   # - name: set group and perms for /var/www
+   #   action: file state=directory path=/var/www mode=0775 owner=root group=www-data recurse=yes 
